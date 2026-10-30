@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bunting – plan weddings, birthdays and community events</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Shrikhand&family=Caveat+Brush&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2a1b3d; --paper:#ece6ff; --card:#fffdf8; --pink:#ff5c8a; --gold:#ffb627; --teal:#14b8a6; --sky:#5b8def; --muted:#6b5f80;
+  --display:'Bricolage Grotesque','Trebuchet MS',sans-serif; --fancy:'Shrikhand',Georgia,serif; --script:'Caveat Brush','Comic Sans MS',cursive; --body:'Instrument Sans','Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font:400 16px/1.55 var(--body);color:var(--ink);background:var(--paper);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .16 0 0 0 0 .1 0 0 0 0 .24 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  min-height:100vh;overflow-x:hidden}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* bunting */
+.bunting{display:flex;justify-content:space-between;padding:0 2%;position:relative;height:96px;overflow:hidden}
+.bunting::before{content:"";position:absolute;left:-2%;right:-2%;top:6px;height:2px;background:var(--ink);border-radius:50%/100%}
+.flag{width:clamp(34px,6.4vw,64px);margin-top:6px;transform-origin:50% 0;animation:swing 4.2s ease-in-out infinite;animation-delay:calc(var(--i)*-.37s)}
+.flag span{display:grid;place-items:center;height:calc(100% + 0px);aspect-ratio:1/1.25;clip-path:polygon(0 0,100% 0,50% 100%);
+  font:800 clamp(14px,2.4vw,24px)/1 var(--display);color:var(--ink);padding-bottom:30%}
+@keyframes swing{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+
+header.top{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.logo{font:400 32px var(--fancy);letter-spacing:.01em}
+.logo i{font-style:normal;color:var(--pink)}
+nav a{margin-left:20px;font-weight:600;text-decoration:none;color:var(--ink)}
+nav a:hover{text-decoration:underline wavy var(--pink)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start;padding:24px 0 56px}
+h1{font:400 clamp(40px,6vw,74px)/1.06 var(--fancy);letter-spacing:-.005em}
+h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--gold) 62% 92%,transparent 92%)}
+.lead{font-size:19px;color:var(--muted);max-width:46ch;margin:18px 0 26px}
+.steps{display:flex;gap:12px;flex-wrap:wrap;font-weight:600;font-size:14px}
+.steps b{background:var(--ink);color:var(--paper);border-radius:99px;padding:6px 14px}
+
+.brief{background:var(--card);border:2.5px solid var(--ink);border-radius:28px 28px 28px 6px;padding:24px;box-shadow:8px 8px 0 var(--ink);transform:rotate(.6deg)}
+.brief h2{font:400 27px var(--fancy);margin-bottom:14px}
+.types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.type{border:2px solid var(--ink);background:#fff;border-radius:16px;padding:10px 4px;cursor:pointer;font-weight:600;font-size:14px;transition:transform .15s,background .15s}
+.type b{display:block;font-size:26px}
+.type[aria-pressed=true]{background:var(--c);transform:translateY(-3px) rotate(-1.5deg);box-shadow:3px 3px 0 var(--ink)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-size:13px;font-weight:600;color:var(--muted)}
+input,select{width:100%;margin-top:4px;padding:9px 11px;border:2px solid var(--ink);border-radius:12px;background:#fff}
+.vibes{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.vibe{border:2px solid var(--ink);border-radius:99px;background:transparent;padding:4px 12px;font-size:14px;cursor:pointer}
+.vibe[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.go{width:100%;margin-top:6px;padding:14px;border:2.5px solid var(--ink);border-radius:16px;background:var(--pink);font:400 23px var(--fancy);cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:transform .12s,box-shadow .12s}
+.go:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.go:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+
+/* workspace */
+#space{padding-bottom:90px;scroll-margin-top:10px}
+.sum{display:flex;flex-wrap:wrap;gap:14px;align-items:end;justify-content:space-between;margin-bottom:18px}
+.sum h2{font:400 clamp(32px,5vw,54px)/1.05 var(--fancy)}
+.sum p{color:var(--muted)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:-2.5px;position:relative;z-index:1}
+.tab{padding:10px 20px;border:2.5px solid var(--ink);border-bottom:0;border-radius:16px 16px 0 0;background:#ddd3fb;font-weight:700;cursor:pointer}
+.tab[aria-selected=true]{background:var(--card)}
+.panel{background:var(--card);border:2.5px solid var(--ink);border-radius:0 24px 24px 24px;padding:26px;box-shadow:8px 8px 0 var(--ink);min-height:300px}
+.panel[hidden]{display:none}
+
+.bar{display:flex;height:46px;border:2.5px solid var(--ink);border-radius:14px;overflow:hidden;margin:6px 0 20px}
+.bar i{display:block;transition:flex-grow .5s cubic-bezier(.3,1.4,.5,1);border-right:2px solid var(--ink)}
+.bar i:last-child{border:0}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.cat{display:grid;grid-template-columns:14px 1fr 74px;gap:4px 10px;align-items:center;padding:10px 12px;border:2px solid var(--ink);border-radius:14px 14px 14px 4px;background:#fff}
+.cat .sw{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink)}
+.cat input{margin:0;padding:5px 6px;text-align:right}
+.cat small{grid-column:2/4;color:var(--muted)}
+.cat strong{font-variant-numeric:tabular-nums}
+.notes{margin-top:18px;display:grid;gap:8px}
+.note{padding:12px 16px;border-radius:14px;border:2px dashed var(--ink);background:#fff6d6}
+.note.bad{background:#ffe0e8}
+
+.tl{list-style:none;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;border-left:3px dotted var(--ink)}
+.tl li{position:relative;padding:0 0 18px 44px}
+.tl input{position:absolute;left:0;top:2px;width:24px;height:24px;margin:0;accent-color:var(--pink)}
+.tl b{font-family:var(--display);font-size:17px}
+.tl small{display:block;color:var(--muted)}
+.tl li.done b{text-decoration:line-through;opacity:.5}
+.prog{height:12px;border:2px solid var(--ink);border-radius:9px;background:#fff;overflow:hidden;margin-bottom:20px}
+.prog i{display:block;height:100%;width:0;background:var(--teal);transition:width .4s}
+
+.vgroup{margin-bottom:20px}
+.vgroup h3{font:400 22px var(--fancy);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.vgroup h3::before{content:"";width:18px;height:18px;border-radius:5px 50% 5px 50%;background:var(--c);border:2px solid var(--ink)}
+.v{display:grid;grid-template-columns:28px 1fr 120px;gap:12px;align-items:center;padding:10px 0;border-bottom:1.5px dashed #c9bfe6}
+.v input[type=checkbox]{width:22px;height:22px;margin:0;accent-color:var(--teal)}
+.v input[type=number]{margin:0;padding:6px 8px}
+.v small{color:var(--muted);display:block}
+
+.ideas{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.idea{padding:18px;border:2.5px solid var(--ink);background:var(--c);min-height:170px;box-shadow:5px 5px 0 var(--ink)}
+.idea:nth-child(odd){border-radius:22px 6px 22px 6px}
+.idea:nth-child(even){border-radius:6px 22px 6px 22px}
+.idea h3{font:400 24px/1.1 var(--fancy);margin-bottom:8px}
+.idea span{display:inline-block;margin-top:10px;font-size:13px;font-weight:600;background:#fffdf8;border:1.5px solid var(--ink);border-radius:99px;padding:1px 10px}
+.again{margin-top:20px;padding:10px 20px;border:2.5px solid var(--ink);border-radius:99px;background:var(--gold);font-weight:700;cursor:pointer}
+
+/* extras */
+::selection{background:var(--pink);color:#fff}
+.hero{position:relative}
+.blob{position:absolute;z-index:-1;mix-blend-mode:multiply;opacity:.6}
+.b1{width:320px;height:290px;left:-90px;top:-30px;background:var(--gold);border-radius:62% 38% 55% 45%/48% 60% 40% 52%}
+.b2{width:280px;height:300px;right:-70px;bottom:10px;background:var(--pink);border-radius:40% 60% 45% 55%/55% 40% 60% 45%}
+.b3{width:150px;height:150px;left:42%;bottom:-30px;background:var(--teal);border-radius:50% 50% 40% 60%/60% 40% 60% 40%}
+.brief{position:relative}
+.brief::before{content:"";position:absolute;top:-15px;left:50%;width:120px;height:30px;transform:translateX(-50%) rotate(-4deg);background:repeating-linear-gradient(45deg,rgba(255,182,39,.9) 0 9px,rgba(255,225,140,.9) 9px 18px);border:1.5px solid var(--ink)}
+.hand{font:400 27px/1.1 var(--script);color:var(--pink);transform:rotate(-2deg);display:inline-block;margin:4px 0 14px}
+.marquee{width:calc(100% + 80px);margin:0 0 56px -40px;border-block:2.5px solid var(--ink);background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;transform:rotate(-1.2deg)}
+.track{display:inline-block;animation:slide 38s linear infinite;font:400 27px/1 var(--fancy);padding:12px 0}
+.track span{padding:0 20px}
+.track span:nth-child(3n+1){color:var(--gold)}.track span:nth-child(3n+2){color:var(--pink)}.track span:nth-child(3n){color:var(--teal)}
+@keyframes slide{to{transform:translateX(-50%)}}
+.stamp{width:108px;height:108px;border-radius:50%;border:3px double var(--ink);display:grid;place-content:center;text-align:center;transform:rotate(9deg);background:var(--gold);font:600 12px/1.1 var(--body)}
+.stamp b{font:400 40px/1 var(--fancy)}
+.idea{position:relative;transition:transform .2s}
+.idea::before{content:"";position:absolute;top:-11px;left:50%;width:72px;height:20px;background:rgba(255,253,248,.85);border:1.5px solid var(--ink);transform:translateX(-50%) rotate(3deg)}
+.ideas .idea:nth-child(odd){transform:rotate(-1.4deg)}
+.ideas .idea:nth-child(even){transform:rotate(1.2deg)}
+.ideas .idea:hover{transform:rotate(0) translateY(-5px)}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+[hidden]{display:none!important}
+input:invalid,select:invalid{border-color:#b42318}
+.status{min-height:1.4em;color:var(--muted);font-size:14px}
+button:disabled{opacity:.6;cursor:not-allowed}
+@media(max-width:520px){
+  .wrap{padding-inline:14px}.brief,.panel{padding:18px}
+  .grid2{grid-template-columns:1fr}.types{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .type{font-size:12px}.tab{padding:9px 12px;font-size:14px}
+  .marquee{width:calc(100% + 28px);margin-left:-14px}
+}
+@media print{
+  body{background:#fff}.bunting,.marquee,#fab,#chat,#confetti,.again{display:none!important}
+  .brief{box-shadow:none}.panel{box-shadow:none;break-inside:avoid}
+}
+/* chat */
+#fab{position:fixed;right:18px;bottom:18px;z-index:20;border:2.5px solid var(--ink);background:var(--teal);color:var(--ink);font:400 20px var(--fancy);border-radius:99px;padding:14px 22px;box-shadow:4px 4px 0 var(--ink);cursor:pointer}
+#chat{position:fixed;right:18px;bottom:84px;z-index:20;width:min(380px,calc(100vw - 36px));height:min(520px,70vh);display:none;flex-direction:column;background:var(--card);border:2.5px solid var(--ink);border-radius:24px 24px 6px 24px;box-shadow:8px 8px 0 var(--ink);overflow:hidden}
+#chat.open{display:flex;animation:pop .25s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pop{from{transform:scale(.85) translateY(20px);opacity:0}}
+#chat header{background:var(--ink);color:var(--paper);padding:12px 16px;font:400 21px var(--fancy)}
+#log{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:86%;padding:9px 13px;border-radius:16px;border:2px solid var(--ink);font-size:15px;white-space:pre-wrap}
+.m.bot{background:#fff;border-bottom-left-radius:4px;align-self:flex-start}
+.m.me{background:var(--gold);border-bottom-right-radius:4px;align-self:flex-end}
+.quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 8px}
+.quick button{border:1.5px solid var(--ink);background:#fff;border-radius:99px;padding:3px 10px;font-size:13px;cursor:pointer}
+#chat form{display:flex;gap:8px;padding:10px;border-top:2.5px solid var(--ink)}
+#chat form input{margin:0}
+#chat form button{border:2px solid var(--ink);background:var(--pink);border-radius:12px;padding:0 16px;font-weight:700;cursor:pointer}
+
+footer{padding:30px 0 100px;color:var(--muted);font-size:14px}
+
+@media(max-width:820px){.hero{grid-template-columns:1fr}.brief{transform:none}nav{display:none}.v{grid-template-columns:28px 1fr}.v input[type=number]{grid-column:2}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="bunting" id="bunting" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="logo">bunting<i>.</i></div>
+    <nav><a href="#plan">Start planning</a><a href="#space">Your plan</a></nav>
+  </header>
+
+  <section class="hero" id="plan">
+    <i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i>
+    <div>
+      <h1>Plan the <em>whole day</em>, not just the guest list.</h1>
+      <p class="lead">Tell Bunting what you’re celebrating. It drafts a budget, a countdown, a vendor checklist and a handful of ideas, then answers your questions as plans change.</p>
+      <div class="steps"><b>Weddings</b><b>Birthdays</b><b>Community events</b></div>
+      <p class="hand" style="margin-top:26px">psst… it takes about a minute ✿</p>
+    </div>
+
+    <div class="brief">
+      <h2>What are we celebrating?</h2>
+      <div class="types" id="types"></div>
+      <div class="grid2">
+        <label>Event name<input id="name" placeholder="Meera &amp; Arjun’s wedding"></label>
+        <label>Date<input id="date" type="date"></label>
+        <label>Guests<input id="guests" type="number" min="2" value="80"></label>
+        <label>City<input id="city" placeholder="Kolkata"></label>
+        <label>Total budget<input id="budget" type="number" min="1000" step="1000" value="500000"></label>
+        <label>Currency<select id="cur"><option value="₹">₹ Rupee</option><option value="$">$ Dollar</option><option value="€">€ Euro</option><option value="£">£ Pound</option></select></label>
+      </div>
+      <div class="vibes" id="vibes" role="group" aria-label="Vibe"></div>
+      <p id="form-error" class="note bad" role="alert" hidden></p>
+      <button class="go" id="go" type="button">Build my plan</button>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="track">
+    <span>mandap marigolds</span><span>✦</span><span>rooftop picnics</span><span>✦</span><span>lantern walks</span><span>✦</span><span>sparkler exits</span><span>✦</span><span>potluck tables</span><span>✦</span><span>chai &amp; fairy lights</span><span>✦</span>
+    <span>mandap marigolds</span><span>✦</span><span>rooftop picnics</span><span>✦</span><span>lantern walks</span><span>✦</span><span>sparkler exits</span><span>✦</span><span>potluck tables</span><span>✦</span><span>chai &amp; fairy lights</span><span>✦</span>
+  </div></div>
+
+  <section id="space" hidden>
+    <div class="sum"><div><h2 id="title"></h2><p id="sub"></p></div><div class="stamp" id="stamp"></div></div>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="panel" id="p-budget" role="tabpanel"></div>
+    <div class="panel" id="p-time" role="tabpanel" hidden></div>
+    <div class="panel" id="p-vend" role="tabpanel" hidden></div>
+    <div class="panel" id="p-idea" role="tabpanel" hidden></div>
+  </section>
+
+  <footer>Bunting runs on built-in planning rules. To power the assistant with a real language model, set <code>AI_ENDPOINT</code> in the script.</footer>
+</div>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<button id="fab" aria-expanded="false" aria-controls="chat">Ask Bunting</button>
+<aside id="chat" aria-label="Planning assistant">
+  <header>Bunting assistant</header>
+  <div id="log" aria-live="polite"></div>
+  <div class="quick" id="quick"></div>
+  <form id="cf"><input id="ci" placeholder="Ask about budget, timing, vendors…" aria-label="Message"><button>Send</button></form>
+</aside>
+
+<script>
+/* ---------- Config: point this at your own backend to use a real GenAI model.
+   It receives POST {message, plan} and should return JSON {reply: "..."} ---------- */
+// Configure only with a trusted HTTPS backend. Never place API keys in this file.
+const AI_ENDPOINT = '';
+const AI_TIMEOUT_MS = 10000;
+const STORAGE_KEY = 'bunting-state-v2';
+const MAX_MESSAGE_LENGTH = 500;
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const COL = ['#ff5c8a','#ffb627','#14b8a6','#5b8def','#b58cff','#ff8a4c','#7ad65f','#e8a0bf'];
+
+/* bunting flags */
+const flags = 'PLANPARTYCELEBRATE'.slice(0,18);
+$('#bunting').innerHTML = [...flags].map((c,i)=>`<div class="flag" style="--i:${i}"><span style="background:${COL[i%COL.length]}">${c}</span></div>`).join('');
+
+/* ---------- Knowledge ---------- */
+const TYPES = {
+  wedding:{label:'Wedding',icon:'💍',c:'#ff5c8a',weeks:40,
+    cats:[['Venue & catering',46],['Photo & video',12],['Attire & beauty',10],['Decor & flowers',10],['Music & entertainment',8],['Stationery & favors',3],['Travel & stay',5],['Buffer',6]],
+    time:[[40,'Set the budget and first guest list'],[36,'Lock the date and shortlist venues'],[30,'Book venue, caterer and photographer'],[24,'Choose attire and book decor'],[18,'Send save-the-dates, book music'],[10,'Send invitations, plan stay for guests'],[6,'Menu tasting, final outfit fittings'],[3,'Confirm RSVPs and seating'],[1,'Final vendor calls, pack the emergency kit'],[0,'The day. Hand tasks to a trusted person.']],
+    vend:[['Venue & catering',['Venue','Caterer','Cake or dessert table']],['Capture',['Photographer','Videographer']],['Look & feel',['Decorator / florist','Makeup artist','Mehendi or hair stylist']],['Sound & flow',['DJ or live band','Emcee','Transport']]]},
+  birthday:{label:'Birthday',icon:'🎂',c:'#ffb627',weeks:6,
+    cats:[['Food & drinks',40],['Venue',20],['Decor & balloons',12],['Entertainment',13],['Cake',8],['Return gifts',4],['Buffer',3]],
+    time:[[6,'Pick date, guest list and budget'],[5,'Choose theme and venue'],[4,'Send invitations'],[3,'Order cake, book entertainer'],[2,'Confirm food and decor'],[1,'Confirm RSVPs, buy supplies'],[0,'Party day. Set up two hours early.']],
+    vend:[['Food',['Caterer or restaurant','Cake baker']],['Fun',['Entertainer or DJ','Photographer','Games or activity kit']],['Setup',['Venue','Decorator or balloon artist']]]},
+  community:{label:'Community',icon:'🏮',c:'#14b8a6',weeks:10,
+    cats:[['Venue & permits',22],['Food & water',28],['Sound & stage',16],['Volunteers & supplies',10],['Marketing & print',9],['Insurance & safety',8],['Buffer',7]],
+    time:[[10,'Define purpose, date and budget'],[9,'Recruit the core volunteer team'],[8,'Apply for permits, request sponsors'],[6,'Book venue, sound and stage'],[4,'Start promotion, confirm performers'],[2,'Brief volunteers, plan first aid'],[1,'Walk the site, print signage'],[0,'Event day. Run a short team huddle first.']],
+    vend:[['Permissions',['Venue or ground booking','Local permit','Insurance cover']],['Production',['Sound and lights','Stage or tents','Security']],['Hospitality',['Food stalls or caterer','Drinking water','First aid']]]}
+};
+const VIBES = ['Cozy','Glam','Outdoor','Playful','Traditional','Minimal'];
+const IDEAS = {
+  wedding:[['Marigold & mirror-work mandap','Traditional','Layer fresh marigold garlands with mirror-work cloth for a mandap that glows in photos.'],['Candlelit long-table dinner','Cozy','Swap the buffet for shared platters on one long table. Fewer tables, more conversation.'],['Garden sunset ceremony','Outdoor','Time vows for golden hour and keep a tented backup within reach.'],['Sparkle exit with a dhol','Glam','End the night with a drum procession and sparklers (check venue fire rules).'],['Handwritten menu cards','Minimal','One tone of paper, one pen colour, and each guest’s dish noted on their card.'],['Photo-booth with props from your story','Playful','Fill it with items from your own history instead of generic props.']],
+  birthday:[['Mystery-box dinner party','Playful','Each guest opens a sealed clue that sets their role for the evening.'],['Rooftop picnic with fairy lights','Outdoor','Cushions, low tables and string lights keep it affordable and warm.'],['Memory wall','Cozy','Ask guests to bring one printed photo with the birthday person and pin it to a wall.'],['Black-and-gold dessert bar','Glam','Spend on one stunning table instead of decorating the whole room.'],['Single-colour theme','Minimal','Pick one colour for balloons, cake and dress code. Cheap and photogenic.'],['Retro fair day','Traditional','Pani puri, lemon soda and carrom games bring instant nostalgia.']],
+  community:[['Potluck with recipe cards','Cozy','Neighbours bring a dish and a card telling its story. Print a shared cookbook later.'],['Open-air film night','Outdoor','Project onto a bedsheet, add a chai stall and ask people to bring mats.'],['Skill-swap stalls','Playful','Ten-minute lessons: knots, kolam, coding, calligraphy. Everyone teaches something.'],['Heritage walk and lamp lighting','Traditional','End a local history walk with lamps along the route.'],['Zero-waste fair','Minimal','Steel plates, a deposit scheme for cups and a compost corner.'],['Sunset talent show','Glam','Real lights, a proper emcee and a stage turn open-mic into an event.']]
+};
+
+/* ---------- State ---------- */
+let S = {type:'wedding',vibes:new Set(['Cozy']),plan:null,done:{},quotes:{}};
+function loadState(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+    if(raw&&typeof raw==='object'&&!Array.isArray(raw)){
+      S.done=raw.done&&typeof raw.done==='object'&&!Array.isArray(raw.done)?raw.done:{};
+      const savedQuotes=raw.quotes&&typeof raw.quotes==='object'&&!Array.isArray(raw.quotes)?raw.quotes:{};
+      S.quotes=Object.fromEntries(Object.entries(savedQuotes)
+        .filter(([key,value])=>/^[a-z]+-v\d+-\d+$/.test(key)&&Number.isFinite(Number(value))&&Number(value)>=0&&Number(value)<=100000000000)
+        .map(([key,value])=>[key,String(Number(value))]));
+      const savedDone=raw.done&&typeof raw.done==='object'&&!Array.isArray(raw.done)?raw.done:{};
+      S.done=Object.fromEntries(Object.entries(savedDone).filter(([key,value])=>/^[a-z]+-(?:t\d+|v\d+-\d+)$/.test(key)&&typeof value==='boolean'));
+    }
+  }catch(error){console.warn('Saved planner data could not be read.');}
+}
+function save(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify({done:S.done,quotes:S.quotes}));}
+  catch(error){console.warn('Planner changes could not be saved in this browser.');}
+}
+loadState();
+const money=n=>$('#cur').value+Math.round(Number.isFinite(Number(n))?Number(n):0).toLocaleString('en-IN');
+const safeNumber=(value,min,max)=>Number.isFinite(Number(value))?Math.min(max,Math.max(min,Number(value))):min;
+const localDateInput=d=>{const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`};
+const formatDate=d=>d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+const announce=(message)=>{const el=$('#form-error');el.textContent=message;el.hidden=!message};
+
+/* ---------- Brief UI ---------- */
+$('#types').innerHTML = Object.entries(TYPES).map(([k,t])=>`<button class="type" style="--c:${t.c}" data-t="${k}" aria-pressed="${k===S.type}"><b>${t.icon}</b>${t.label}</button>`).join('');
+$('#vibes').innerHTML = VIBES.map(v=>`<button class="vibe" aria-pressed="${S.vibes.has(v)}">${v}</button>`).join('');
+$('#types').onclick = e=>{const b=e.target.closest('.type');if(!b)return;S.type=b.dataset.t;$$('.type').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  $('#guests').value={wedding:80,birthday:25,community:150}[S.type];$('#budget').value={wedding:500000,birthday:30000,community:60000}[S.type]};
+$('#vibes').onclick = e=>{const b=e.target.closest('.vibe');if(!b)return;const v=b.textContent;S.vibes.has(v)?S.vibes.delete(v):S.vibes.add(v);b.setAttribute('aria-pressed',S.vibes.has(v))};
+const d0=new Date();d0.setDate(d0.getDate()+120);$('#date').value=localDateInput(d0);
+$('#guests').max='1000000';$('#budget').max='100000000000';$('#date').min=localDateInput(new Date());
+
+/* ---------- Build plan ---------- */
+$('#go').onclick = build;
+function build(){
+  announce('');
+  const t=TYPES[S.type], guestRaw=$('#guests').value.trim(), budgetRaw=$('#budget').value.trim(), dateRaw=$('#date').value;
+  const guests=Number(guestRaw), budget=Number(budgetRaw);
+  if(!guestRaw||!Number.isInteger(guests)||guests<2||guests>1000000){announce('Enter a whole-number guest count between 2 and 1,000,000.');$('#guests').focus();return;}
+  if(!budgetRaw||!Number.isFinite(budget)||budget<1000||budget>100000000000){announce('Enter a valid budget between 1,000 and 100,000,000,000.');$('#budget').focus();return;}
+  if(!dateRaw){announce('Please choose the event date.');$('#date').focus();return;}
+  const [year,month,day]=dateRaw.split('-').map(Number), date=new Date(year,month-1,day);
+  if(date.getFullYear()!==year||date.getMonth()!==month-1||date.getDate()!==day){announce('Please enter a valid event date.');$('#date').focus();return;}
+  const today=new Date();today.setHours(0,0,0,0);
+  const days=Math.round((date-today)/86400000);
+  if(days<0){announce('The event date cannot be in the past.');$('#date').focus();return;}
+  const scale=Math.min(1,Math.max(days,1)/(t.weeks*7));
+  S.plan={type:S.type,name:$('#name').value.trim().slice(0,100)||`My ${t.label.toLowerCase()}`,guests,budget,
+    city:$('#city').value.trim().slice(0,80),date,days,compressed:scale<1,
+    cats:t.cats.map(([n,p],i)=>({n,p,c:COL[i%COL.length]})),
+    time:t.time.map(([w,txt],i)=>({id:S.type+'-t'+i,txt,date:new Date(date.getTime()-w*7*scale*86400000)})),
+    vend:t.vend.map(([g,items],gi)=>({g,c:COL[(gi*2+1)%COL.length],items:items.map((n,i)=>({id:`${S.type}-v${gi}-${i}`,n}))})),
+    ideaSeed:0};
+  const validIds=new Set([...S.plan.time.map(x=>x.id),...S.plan.vend.flatMap(g=>g.items.map(x=>x.id))]);
+  S.done=Object.fromEntries(Object.entries(S.done).filter(([k])=>validIds.has(k)));
+  S.quotes=Object.fromEntries(Object.entries(S.quotes).filter(([k])=>S.plan.vend.some(g=>g.items.some(v=>v.id===k))));
+  save();render();$('#space').hidden=false;
+  $('#space').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  confetti();botSay(`I’ve drafted your plan. That’s about ${money(budget/guests)} per guest. Ask me anything: where to trim, what to book first, or how to fit a tighter timeline.`);
+}
+
+/* ---------- Render ---------- */
+function render(){
+  const p=S.plan, t=TYPES[p.type];
+  $('#title').textContent=p.name;
+  $('#stamp').textContent='';
+  const stampText=document.createElement('span'), stampNumber=document.createElement('b');
+  stampNumber.textContent=String(Math.max(p.days,0));
+  stampText.append(stampNumber,document.createElement('br'),'days to go');$('#stamp').append(stampText);
+  $('#sub').textContent=`${p.date.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})} · ${p.guests} guests${p.city?' · '+p.city:''} · ${Math.max(p.days,0)} days to go`.replace(/ · /g,'  |  ');
+  const tabs=[['p-budget','Budget'],['p-time','Timeline'],['p-vend','Vendors'],['p-idea','Ideas']];
+  $('#tabs').innerHTML=tabs.map(([id,l],i)=>`<button class="tab" id="tab-${id}" role="tab" aria-selected="${i===0}" data-p="${id}" aria-controls="${id}" tabindex="${i===0?0:-1}">${l}</button>`).join('');
+  $('#tabs').onclick=e=>{
+    const b=e.target.closest('.tab');if(!b)return;
+    $$('.tab').forEach(x=>{const active=x===b;x.setAttribute('aria-selected',String(active));x.tabIndex=active?0:-1;});
+    tabs.forEach(([id])=>{$('#'+id).hidden=id!==b.dataset.p;$('#'+id).setAttribute('aria-labelledby',`tab-${id}`);});
+    b.focus();
+  };
+  tabs.forEach(([id])=>$('#'+id).setAttribute('aria-labelledby',`tab-${id}`));
+  renderBudget();renderTime();renderVend();renderIdeas();
+}
+function renderBudget(){
+  const p=S.plan,total=p.cats.reduce((a,c)=>a+c.p,0);
+  const activeIds=new Set(p.vend.flatMap(g=>g.items.map(v=>v.id)));
+  const quoted=Object.entries(S.quotes).reduce((sum,[id,value])=>sum+(activeIds.has(id)?safeNumber(value,0,100000000000):0),0);
+  $('#p-budget').innerHTML=`<p class="hand">every coin gets a job ✿</p><div class="bar">${p.cats.map(c=>`<i style="flex-grow:${c.p};background:${c.c}" title="${c.n}"></i>`).join('')}</div>
+  <div class="cats">${p.cats.map((c,i)=>`<div class="cat"><span class="sw" style="background:${c.c}"></span><span>${c.n}</span><input type="number" min="0" max="100" value="${c.p}" data-i="${i}" aria-label="${c.n} percent"><small><strong>${money(p.budget*c.p/100)}</strong> · ${c.p}% of budget</small></div>`).join('')}</div>
+  <div class="notes">
+   <div class="note ${total!==100?'bad':''}">Shares add up to ${total}%. ${total===100?'Perfect, every rupee has a job.':'Adjust until they reach 100%.'}</div>
+   <div class="note ${quoted>p.budget?'bad':''}">Quotes entered in Vendors: <b>${money(quoted)}</b> of ${money(p.budget)}${quoted?` (${Math.round(quoted/p.budget*100)}%)`:''}.</div>
+   <div class="note">${perGuestTip(p)}</div></div>`;
+  $('#p-budget').querySelectorAll('.cat input').forEach(inp=>inp.onchange=()=>{
+    const index=Number(inp.dataset.i), value=safeNumber(inp.value,0,100);
+    p.cats[index].p=value;inp.value=value;renderBudget();
+  });
+}
+function perGuestTip(p){const g=p.budget/p.guests,lim={wedding:[3000,8000],birthday:[500,1500],community:[200,600]}[p.type];
+  return g<lim[0]?`At ${money(g)} per guest this is lean. Trim the guest list by 10–15% or simplify the menu before cutting decor.`:g>lim[1]?`At ${money(g)} per guest you have room for one standout feature. Pick one place to splurge and keep the rest simple.`:`At ${money(g)} per guest you’re in a comfortable range for this kind of event.`}
+function renderTime(){
+  const p=S.plan,n=p.time.filter(x=>S.done[x.id]).length;
+  $('#p-time').innerHTML=`${p.compressed?'<div class="note bad" style="margin-bottom:16px">Your date is closer than the ideal lead time, so milestones are compressed. Book the biggest items first.</div>':''}
+  <p class="hand">tick them off as you go ✓</p><div class="prog"><i style="width:${n/p.time.length*100}%"></i></div>
+  <ol class="tl">${p.time.map(x=>`<li class="${S.done[x.id]?'done':''}"><input type="checkbox" id="${x.id}" ${S.done[x.id]?'checked':''} aria-label="Done"><b>${x.txt}</b><small>${x.date.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</small></li>`).join('')}</ol>`;
+  $('#p-time').querySelectorAll('input').forEach(i=>i.onchange=()=>{S.done[i.id]=i.checked;save();renderTime()});
+}
+function renderVend(){
+  const p=S.plan;
+  $('#p-vend').innerHTML=p.vend.map(g=>`<div class="vgroup" style="--c:${g.c}"><h3>${g.g}</h3>${g.items.map(v=>`<div class="v"><input type="checkbox" id="${v.id}" ${S.done[v.id]?'checked':''} aria-label="${v.n} booked"><div>${v.n}<small>${S.done[v.id]?'Booked':'Not booked yet'}</small></div><input type="number" min="0" placeholder="Quote" value="${S.quotes[v.id]||''}" data-q="${v.id}" aria-label="${v.n} quote"></div>`).join('')}</div>`).join('');
+  $('#p-vend').querySelectorAll('[type=checkbox]').forEach(i=>i.onchange=()=>{S.done[i.id]=i.checked;save();renderVend()});
+  $('#p-vend').querySelectorAll('[data-q]').forEach(i=>i.onchange=()=>{
+    const value=i.value.trim();
+    if(value===''){delete S.quotes[i.dataset.q];}
+    else if(!Number.isFinite(Number(value))||Number(value)<0||Number(value)>100000000000){i.setCustomValidity('Enter a valid non-negative quote.');i.reportValidity();return;}
+    else{ i.setCustomValidity('');S.quotes[i.dataset.q]=String(Number(value)); }
+    save();renderBudget();
+  });
+}
+function renderIdeas(){
+  const p=S.plan,pool=IDEAS[p.type].slice(),v=[...S.vibes];
+  pool.sort((a,b)=>(v.includes(b[1])-v.includes(a[1]))||(((a[0].length*7+p.ideaSeed*13)%11)-((b[0].length*7+p.ideaSeed*13)%11)));
+  $('#p-idea').innerHTML=`<div class="ideas">${pool.slice(0,4).map((x,i)=>`<article class="idea" style="--c:${COL[(i*2+p.ideaSeed)%COL.length]}"><h3>${x[0]}</h3><p>${x[2]}</p><span>${x[1]}</span></article>`).join('')}</div><button class="again" id="again">Spark new ideas</button>`;
+  $('#again').onclick=()=>{p.ideaSeed++;renderIdeas()};
+}
+
+/* ---------- Confetti ---------- */
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const cv=$('#confetti'),x=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;
+  const P=Array.from({length:150},()=>({x:innerWidth/2+(Math.random()-.5)*240,y:innerHeight*.65,vx:(Math.random()-.5)*17,vy:-Math.random()*17-6,r:Math.random()*6,vr:(Math.random()-.5)*.4,w:7+Math.random()*9,h:4+Math.random()*6,c:COL[Math.random()*8|0],dot:Math.random()>.7}));
+  let f=0;(function t(){x.clearRect(0,0,cv.width,cv.height);
+    P.forEach(p=>{p.vy+=.36;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.strokeStyle='#2a1b3d';x.lineWidth=1.5;
+      if(p.dot){x.beginPath();x.arc(0,0,p.w/2,0,7);x.fill();x.stroke()}else{x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.strokeRect(-p.w/2,-p.h/2,p.w,p.h)}x.restore()});
+    ++f<160?requestAnimationFrame(t):x.clearRect(0,0,cv.width,cv.height)})();
+}
+
+/* ---------- Assistant ---------- */
+const log=$('#log');
+const addMsg=(t,who)=>{const d=document.createElement('div');d.className='m '+who;d.textContent=t;log.append(d);log.scrollTop=log.scrollHeight};
+const botSay=t=>addMsg(t,'bot');
+$('#quick').innerHTML=['Where can I save money?','What should I book first?','Is my budget realistic?','Give me an idea'].map(q=>`<button>${q}</button>`).join('');
+$('#quick').onclick=e=>{if(e.target.tagName==='BUTTON')ask(e.target.textContent)};
+$('#fab').onclick=()=>{
+  const o=$('#chat').classList.toggle('open');$('#fab').setAttribute('aria-expanded',String(o));
+  if(o&&!log.children.length)botSay('Hi, I’m Bunting. Build a plan first, then ask me about budget, timing, vendors or ideas.');
+  if(o)$('#ci').focus();
+};
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&$('#chat').classList.contains('open')){
+    $('#chat').classList.remove('open');$('#fab').setAttribute('aria-expanded','false');$('#fab').focus();
+  }
+});
+$('#cf').onsubmit=e=>{e.preventDefault();const v=$('#ci').value.trim();if(v){$('#ci').value='';ask(v)}};
+
+async function ask(q){
+  q=String(q||'').trim().slice(0,MAX_MESSAGE_LENGTH);
+  if(!q)return;
+  addMsg(q,'me');
+  if(AI_ENDPOINT){
+    const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),AI_TIMEOUT_MS);
+    try{
+      const response=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify({message:q,plan:S.plan}),signal:controller.signal,credentials:'omit',mode:'cors'});
+      if(!response.ok)throw new Error(`Assistant service returned ${response.status}`);
+      const data=await response.json();
+      if(typeof data.reply==='string'&&data.reply.trim())return botSay(data.reply.slice(0,3000));
+      throw new Error('Assistant response had an invalid format.');
+    }catch(error){console.warn('AI assistant unavailable; using built-in helper.',error);}
+    finally{clearTimeout(timer);}
+  }
+  setTimeout(()=>botSay(reply(q)),250);
+}
+function reply(q){
+  const p=S.plan,s=q.toLowerCase();
+  if(!p)return 'Fill in the brief on the page and press “Build my plan”. Then I can work with real numbers.';
+  const top=[...p.cats].sort((a,b)=>b.p-a.p), g=p.budget/p.guests;
+  if(/save|cut|cheap|trim|reduce/.test(s))return `Three places to start:\n1. Guest list. Each guest costs about ${money(g)}, so ten fewer saves ${money(g*10)}.\n2. “${top[0].n}” is your largest slice at ${money(p.budget*top[0].p/100)}. Ask for two package quotes.\n3. Choose a weekday or off-peak slot. Venues often discount 10–25%.`;
+  if(/first|book|priority|start/.test(s)){const n=p.time.find(x=>!S.done[x.id]);return `Book the item that fixes your date: ${p.vend[0].items[0].n.toLowerCase()}. Next on your timeline: “${n?n.txt:'everything is ticked off'}”${n?' by '+n.date.toLocaleDateString('en-IN',{day:'numeric',month:'short'}):''}.`}
+  if(/realistic|enough|afford|budget|cost/.test(s))return perGuestTip(p)+` Keep the ${p.cats[p.cats.length-1].p}% buffer untouched. Plans nearly always grow.`;
+  if(/idea|theme|decor|inspire|surprise/.test(s)){const i=IDEAS[p.type][Math.floor(Math.random()*6)];return `Try this: ${i[0]}. ${i[2]}`}
+  if(/time|when|deadline|late|behind|rush/.test(s))return p.compressed?`You have ${Math.max(p.days,0)} days, less than the ideal lead time. Book venue, food and photographer this week, then do the rest in parallel.`:`You have ${p.days} days. That’s comfortable. Tick off milestones as they happen and I’ll flag anything slipping.`;
+  if(/vendor|quote|negotiate|contract/.test(s))return 'Ask each vendor for the same written quote: what’s included, the deposit, the cancellation terms and overtime rates. Compare three before you commit, and never pay the full amount upfront.';
+  if(/rain|weather|outdoor|monsoon/.test(s))return 'For outdoor plans, keep a covered backup within a short walk and tell vendors the switch-over time in advance. Tents cost less than a failed day.';
+  if(/rsvp|invite|guest/.test(s))return `Expect about 80–90% of invited guests to attend. If ${p.guests} is your confirmed number, you can invite roughly ${Math.round(p.guests*1.12)}.`;
+  return `I can help with budget trade-offs, what to book first, timing, vendor questions and ideas. For your ${TYPES[p.type].label.toLowerCase()}, the biggest lever is the ${top[0].n.toLowerCase()} line.`;
+}
+</script>
+</body>
+</html>
